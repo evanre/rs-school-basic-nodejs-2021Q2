@@ -13,16 +13,16 @@ class User {
     this.password = password;
   }
 
-  static toResponse(data) {
-    return data;
+  static toResponse({ id, name, login }) {
+    return { id, name, login };
   }
 
   static fromRequest(data) {
     return new User(data);
   }
 
-  static toDb(data) {
-    return data;
+  static toDb({ id, name, login, password }) {
+    return { id, name, login, password };
   }
 }
 

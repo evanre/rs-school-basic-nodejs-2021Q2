@@ -17,4 +17,22 @@ const create = async (task) => db.create('tasks', task);
 
 const update = async (task) => db.update('tasks', task);
 
-module.exports = { getAll, get, remove, removeByBoard, create, update };
+const resetUserLink = async (userId) => {
+  const tasks = await getAll();
+
+  tasks.forEach((task) => {
+    if (userId === task.userId) {
+      db.update('tasks', { ...task, userId: null });
+    }
+  });
+};
+
+module.exports = {
+  getAll,
+  get,
+  remove,
+  removeByBoard,
+  create,
+  update,
+  resetUserLink,
+};

@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const Task = require('./task.model');
 const tasksService = require('./task.service');
 
@@ -11,11 +11,17 @@ router.route('/').get(async (req, res) => {
 router.route('/:id').get(async (req, res) => {
   const task = await tasksService.get(req.params.id);
   // map task fields to exclude secret fields like "password"
+
+  if (!task) res.status(404).json('Not found');
+
   res.json(Task.toResponse(task));
 });
 
-router.route('/').post(async ({ body }, res) => {
-  const task = await tasksService.create(Task.fromRequest(body));
+router.route('/').post(async ({ body, params }, res) => {
+  const { boardId } = params;
+  const task = await tasksService.create(
+    Task.fromRequest({ ...body, boardId })
+  );
 
   res.status(201).json(Task.toResponse(task));
 });

@@ -11,6 +11,9 @@ router.route('/').get(async (req, res) => {
 router.route('/:id').get(async (req, res) => {
   const board = await boardsService.get(req.params.id);
   // map board fields to exclude secret fields like "password"
+
+  if (!board) res.status(404).json('Not found');
+
   res.json(Board.toResponse(board));
 });
 
