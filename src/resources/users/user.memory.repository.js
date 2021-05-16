@@ -1,6 +1,9 @@
-const getAll = async () => 
-  // TODO: mock implementation. should be replaced during task development
-   []
-;
+const db = require('../../common/memoDB');
 
-module.exports = { getAll };
+const getAll = async () => db.getAll('users');
+
+const get = async (id) => db.get('users', id);
+
+const create = async (user) => db.create('users', user);
+
+module.exports = { getAll, get, create };
