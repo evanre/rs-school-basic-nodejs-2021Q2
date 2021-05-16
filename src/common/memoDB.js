@@ -1,14 +1,38 @@
-const DB = {
-  users: [],
-};
+class MemoDB {
+  constructor() {
+    this.users = [];
+  }
 
-const getAll = async (entity) => DB[entity];
+  getAll(entityName) {
+    return this[entityName];
+  }
 
-const get = async (entity, id) => DB[entity].find((el) => el.id === id);
+  get(entityName, id) {
+    return this[entityName].find((el) => el.id === id);
+  }
 
-const create = async (entity, user) => {
-  DB[entity].push(user);
-  return user;
-};
+  getIndex(entityName, id) {
+    return this[entityName].findIndex((el) => el.id === id);
+  }
 
-module.exports = { getAll, get, create };
+  create(entityName, entity) {
+    const idx = this[entityName].push(entity) - 1;
+
+    return this[entityName][idx];
+  }
+
+  update(entityName, entity) {
+    const idx = this.getIndex(entityName, entity.id);
+    this[entityName][idx] = entity;
+
+    return this[entityName][idx];
+  }
+
+  remove(entityName, id) {
+    const idx = this.getIndex(entityName, id);
+
+    this[entityName].splice(idx, 1);
+  }
+}
+
+module.exports = new MemoDB();

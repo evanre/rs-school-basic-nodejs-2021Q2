@@ -15,9 +15,23 @@ router.route('/:id').get(async (req, res) => {
 });
 
 router.route('/').post(async ({ body }, res) => {
-  const { name, login, password } = body;
-  const user = await usersService.create(new User({ name, login, password }));
+  const user = await usersService.create(User.fromRequest(body));
+
   res.status(201).json(User.toResponse(user));
+});
+
+router.route('/:id').delete(async ({ params }, res) => {
+  await usersService.remove(params.id);
+
+  res.json('ok');
+});
+
+router.route('/:id').put(async ({ params, body }, res) => {
+  const { id } = params;
+  const user = User.fromRequest({ ...body, id });
+  await usersService.update(user);
+
+  res.json(user);
 });
 
 module.exports = router;
