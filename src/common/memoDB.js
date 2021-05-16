@@ -2,6 +2,7 @@ class MemoDB {
   constructor() {
     this.users = [];
     this.boards = [];
+    this.tasks = [];
   }
 
   getAll(entityName) {
