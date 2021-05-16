@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+const { randomUUID: uuid } = require('crypto');
 
 class User {
   constructor({
