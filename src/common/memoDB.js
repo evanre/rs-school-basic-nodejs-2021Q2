@@ -1,6 +1,7 @@
 class MemoDB {
   constructor() {
     this.users = [];
+    this.boards = [];
   }
 
   getAll(entityName) {
