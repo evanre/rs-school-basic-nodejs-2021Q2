@@ -1,11 +1,11 @@
-const uuid = require('uuid');
+const { randomUUID: uuid } = require('crypto');
 
 class User {
   constructor({
     id = uuid(),
     name = 'USER',
     login = 'user',
-    password = 'P@55w0rd'
+    password = 'P@55w0rd',
   } = {}) {
     this.id = id;
     this.name = name;
@@ -13,9 +13,16 @@ class User {
     this.password = password;
   }
 
-  static toResponse(user) {
-    const { id, name, login } = user;
+  static toResponse({ id, name, login }) {
     return { id, name, login };
+  }
+
+  static fromRequest(data) {
+    return new User(data);
+  }
+
+  static toDb({ id, name, login, password }) {
+    return { id, name, login, password };
   }
 }
 
