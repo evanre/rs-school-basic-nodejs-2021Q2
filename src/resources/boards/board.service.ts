@@ -1,41 +1,38 @@
-import db from '../../common/memoDB.js';
-import tasksRepo from '../tasks/task.memory.repository.js';
+import boardsRepo from './board.memory.repository';
+import { IBoard } from '../../common/types';
 
 /**
  * Returns the list of created boards
  * @returns {Array<Board>} - List of boards
  */
-const getAll = async () => db.getAll('boards');
+const getAll = () => boardsRepo.getAll();
 
 /**
  * Returns the board information by given id
  * @param {String} id - a board's identifier
  * @returns {Object} - Board's information
  */
-const get = async (id) => db.get('boards', id);
+const get = (id: string) => boardsRepo.get(id);
 
 /**
  * Removes the board by given id
  * @param {String} id - a board's identifier
  * @returns {void} - Nothing
  */
-const remove = async (id) => {
-  await db.remove('boards', id);
-  await tasksRepo.removeByBoard(id);
-};
+const remove = (id: string) => boardsRepo.remove(id);
 
 /**
  * Creates a new board by given information
  * @param {Object} board - information for creation
  * @returns {Object} - Created board's information
  */
-const create = async (board) => db.create('boards', board);
+const create = (board: IBoard) => boardsRepo.create(board);
 
 /**
  * Updates a board by given information
  * @param {Object} board - information that need to be updated
  * @returns {Object} - Updated board's information
  */
-const update = async (board) => db.update('boards', board);
+const update = (board: IBoard) => boardsRepo.update(board);
 
 export default { getAll, get, remove, create, update };

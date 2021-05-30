@@ -1,6 +1,21 @@
 import { randomUUID } from 'crypto';
+import { ITask } from '../../common/types';
 
 export default class Task {
+  id: string;
+
+  title: string;
+
+  order: number;
+
+  description: string | undefined;
+
+  userId: string | null;
+
+  boardId: string | null;
+
+  columnId: string | null;
+
   constructor({
     id = randomUUID(),
     title = id,
@@ -9,7 +24,7 @@ export default class Task {
     userId,
     boardId,
     columnId,
-  } = {}) {
+  }: ITask) {
     this.id = id;
     this.title = title;
     this.order = order;
@@ -24,7 +39,7 @@ export default class Task {
    * @param {Object} data — the task object
    * @returns {Object} - Object with filtered properties.
    */
-  static toResponse(data) {
+  static toResponse(data: ITask) {
     return data;
   }
 
@@ -33,7 +48,7 @@ export default class Task {
    * @param {Object} data — Passed task object
    * @returns {Object} - Aligned Task instance.
    */
-  static fromRequest(data) {
+  static fromRequest(data: ITask) {
     return new Task(data);
   }
 }

@@ -1,8 +1,25 @@
-import { randomUUID } from 'crypto';
+import bcrypt from 'bcrypt';
+import { randomUUID as uuid } from 'crypto';
+import { IUser } from '../../common/types';
 
-export default class User {
+export default class User implements IUser {
+  id: string;
+
+  name: string;
+
+  login: string;
+
+  password: string;
+
+  /**
+   * @constructor
+   * @param {Id} [id] User id
+   * @param {string} [name="USER"] User name
+   * @param {string} [login="user"] User login
+   * @param {string} [password="P@55w0rd"] User password
+   */
   constructor({
-    id = randomUUID(),
+    id = uuid(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd',
@@ -10,7 +27,7 @@ export default class User {
     this.id = id;
     this.name = name;
     this.login = login;
-    this.password = password;
+    this.password = bcrypt.hashSync(password, 10);
   }
 
   /**
@@ -18,7 +35,7 @@ export default class User {
    * @param {Object} User — the user object
    * @returns {Object} - Object with filtered properties.
    */
-  static toResponse({ id, name, login }) {
+  static toResponse({ id, name, login }: IUser) {
     return { id, name, login };
   }
 
@@ -27,7 +44,7 @@ export default class User {
    * @param {Object} data — Passed user object
    * @returns {Object} - Aligned User instance.
    */
-  static fromRequest(data) {
+  static fromRequest(data: IUser) {
     return new User(data);
   }
 }

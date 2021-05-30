@@ -1,7 +1,14 @@
-import { randomUUID } from 'crypto';
+import { randomUUID as uuid } from 'crypto';
+import { IBoard, IColumn } from '../../common/types';
 
 export default class Board {
-  constructor({ id = randomUUID(), title = 'TITLE', columns = [] } = {}) {
+  id: string;
+
+  title: string;
+
+  columns: IColumn[];
+
+  constructor({ id = uuid(), title = 'TITLE', columns = [] }: IBoard) {
     this.id = id;
     this.title = title;
     this.columns = columns;
@@ -12,7 +19,7 @@ export default class Board {
    * @param {Object} data — the board object
    * @returns {Object} - Object with filtered properties.
    */
-  static toResponse(data) {
+  static toResponse(data: IBoard) {
     return data;
   }
 
@@ -21,7 +28,7 @@ export default class Board {
    * @param {Object} data — Passed board object
    * @returns {Object} - Aligned Board instance.
    */
-  static fromRequest(data) {
+  static fromRequest(data: IBoard) {
     return new Board(data);
   }
 }
