@@ -11,7 +11,8 @@ router.route('/').get(async (_: Request, res: Response) => {
 });
 
 router.route('/:id').get(async ({ params }: Request, res: Response) => {
-  const board = await boardsService.get(params['id'] || '');
+  const { id = '' } = params;
+  const board = await boardsService.get(id);
   if (board) {
     res.json(Board.toResponse(board));
   } else {
@@ -30,7 +31,8 @@ router.route('/').post(async ({ body }: Request, res: Response) => {
 });
 
 router.route('/:id').delete(async ({ params }: Request, res: Response) => {
-  await boardsService.remove(params['id'] || '');
+  const { id = '' } = params;
+  await boardsService.remove(id);
 
   res.status(StatusCodes.OK).json('ok');
 });

@@ -11,7 +11,8 @@ router.route('/').get(async (_: Request, res: Response) => {
 });
 
 router.route('/:id').get(async ({ params }: Request, res: Response) => {
-  const user = await usersService.get(params['id'] || '');
+  const { id = '' } = params;
+  const user = await usersService.get(id);
   if (user) {
     res.status(StatusCodes.OK).json(User.toResponse(user));
   } else {
@@ -30,7 +31,8 @@ router.route('/').post(async ({ body }: Request, res: Response) => {
 });
 
 router.route('/:id').delete(async ({ params }: Request, res: Response) => {
-  await usersService.remove(params['id'] || '');
+  const { id = '' } = params;
+  await usersService.remove(id);
 
   res.status(StatusCodes.OK).json('ok');
 });
