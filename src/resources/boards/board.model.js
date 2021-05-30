@@ -1,7 +1,7 @@
-const { randomUUID: uuid } = require('crypto');
+import { randomUUID } from 'crypto';
 
-class Board {
-  constructor({ id = uuid(), title = 'TITLE', columns = [] } = {}) {
+export default class Board {
+  constructor({ id = randomUUID(), title = 'TITLE', columns = [] } = {}) {
     this.id = id;
     this.title = title;
     this.columns = columns;
@@ -19,5 +19,3 @@ class Board {
     return data;
   }
 }
-
-module.exports = Board;

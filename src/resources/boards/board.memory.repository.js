@@ -1,5 +1,5 @@
-const db = require('../../common/memoDB');
-const tasksRepo = require('../tasks/task.memory.repository');
+import db from '../../common/memoDB.js';
+import tasksRepo from '../tasks/task.memory.repository.js';
 
 const getAll = async () => db.getAll('boards');
 
@@ -14,4 +14,4 @@ const create = async (board) => db.create('boards', board);
 
 const update = async (board) => db.update('boards', board);
 
-module.exports = { getAll, get, remove, create, update };
+export default { getAll, get, remove, create, update };

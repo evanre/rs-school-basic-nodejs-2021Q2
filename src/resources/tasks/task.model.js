@@ -1,8 +1,8 @@
-const { randomUUID: uuid } = require('crypto');
+import { randomUUID } from 'crypto';
 
-class Task {
+export default class Task {
   constructor({
-    id = uuid(),
+    id = randomUUID(),
     title = id,
     order = NaN,
     description = '',
@@ -31,5 +31,3 @@ class Task {
     return data;
   }
 }
-
-module.exports = Task;

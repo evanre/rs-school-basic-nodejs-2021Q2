@@ -1,4 +1,4 @@
-const usersRepo = require('./user.memory.repository');
+import usersRepo from './user.memory.repository.js';
 
 const getAll = () => usersRepo.getAll();
 
@@ -10,4 +10,4 @@ const create = (user) => usersRepo.create(user);
 
 const update = (user) => usersRepo.update(user);
 
-module.exports = { getAll, get, remove, create, update };
+export default { getAll, get, remove, create, update };

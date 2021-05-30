@@ -37,4 +37,4 @@ class MemoDB {
   }
 }
 
-module.exports = new MemoDB();
+export default new MemoDB();

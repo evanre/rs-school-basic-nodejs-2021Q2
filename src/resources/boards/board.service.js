@@ -1,4 +1,4 @@
-const boardsRepo = require('./board.memory.repository');
+import boardsRepo from './board.memory.repository.js';
 
 const getAll = () => boardsRepo.getAll();
 
@@ -10,4 +10,4 @@ const create = (board) => boardsRepo.create(board);
 
 const update = (board) => boardsRepo.update(board);
 
-module.exports = { getAll, get, remove, create, update };
+export default { getAll, get, remove, create, update };
