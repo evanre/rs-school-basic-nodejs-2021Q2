@@ -9,7 +9,7 @@
   "description": "REST service starter for RS School",
   "main": "src/server.js",
   "scripts": {
-    "doc": "jsdoc -d jsdoc --configure jsconf.json src/**/*.js",
+    "doc": "jsdoc -d jsdoc -r -c jsdoc.json",
     "start": "nodemon src/server.js",
     "lint": "eslint --ext .js,.ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
+    "better-docs": "^2.3.2",
     "chai": "4.3.4",
     "debug": "4.3.1",
     "dirty-chai": "2.0.1",

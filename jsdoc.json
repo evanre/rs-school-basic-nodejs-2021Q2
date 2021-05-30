@@ -1,0 +1,9 @@
+{
+	"opts": {
+		"template": "node_modules/better-docs"
+	},
+	"source": {
+		"include": ["src"],
+		"includePattern": "\\.(js|ts)$"
+	}
+}
