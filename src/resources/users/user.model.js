@@ -1,8 +1,8 @@
-const { randomUUID: uuid } = require('crypto');
+import { randomUUID } from 'crypto';
 
-class User {
+export default class User {
   constructor({
-    id = uuid(),
+    id = randomUUID(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd',
@@ -25,5 +25,3 @@ class User {
     return { id, name, login, password };
   }
 }
-
-module.exports = User;

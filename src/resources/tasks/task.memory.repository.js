@@ -1,4 +1,4 @@
-const db = require('../../common/memoDB');
+import db from '../../common/memoDB.js';
 
 const getAll = async () => db.getAll('tasks');
 
@@ -27,7 +27,7 @@ const resetUserLink = async (userId) => {
   });
 };
 
-module.exports = {
+export default {
   getAll,
   get,
   remove,
