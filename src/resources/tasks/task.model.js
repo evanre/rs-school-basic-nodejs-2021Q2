@@ -19,15 +19,21 @@ export default class Task {
     this.columnId = columnId;
   }
 
+  /**
+   * Filters which data should be sent to response from User instance
+   * @param {Object} data — the task object
+   * @returns {Object} - Object with filtered properties.
+   */
   static toResponse(data) {
     return data;
   }
 
+  /**
+   * Handles data from request and aligns it according to Task's model
+   * @param {Object} data — Passed task object
+   * @returns {Object} - Aligned Task instance.
+   */
   static fromRequest(data) {
     return new Task(data);
-  }
-
-  static toDb(data) {
-    return data;
   }
 }
