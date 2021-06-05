@@ -1,0 +1,10 @@
+{
+  "opts": {
+    "template": "node_modules/better-docs",
+    "recurse": true
+  },
+  "source": {
+    "include": ["src"],
+    "includePattern": "\\.(js|ts)$"
+  }
+}
