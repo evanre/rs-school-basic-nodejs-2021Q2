@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 export interface IEntity {
   id: string;
   title: string;
@@ -23,4 +25,14 @@ export interface IUser extends Omit<IEntity, 'title'> {
   name: string;
   login: string;
   password: string;
+}
+
+export interface IRequestResponse {
+  level: string;
+  reqUrl: Request['originalUrl'];
+  reqBody?: Request['body'];
+  reqParams: Request['params'] | string;
+  reqQuery?: Request['query'] | string;
+  resStatus: Response['statusCode'];
+  message: string;
 }
