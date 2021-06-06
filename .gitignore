@@ -4,4 +4,4 @@ node_modules
 jsdoc
 build
 
-*.log
+logs/
