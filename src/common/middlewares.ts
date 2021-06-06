@@ -12,13 +12,14 @@ import {
 export const logger = (
   logInfo: IRequestResponse | IException | IRejection | IUnhandled
 ): void => {
+  const { combine, timestamp, prettyPrint } = format;
   createLogger({
-    format: format.json(),
+    format: combine(timestamp(), prettyPrint()),
     transports: [
       // - Write all logs with level `error` and below to `error.log`
       new transports.File({ filename: './logs/error.log', level: 'error' }),
       // - Write all logs with level `info` and below to `info.log`
-      new transports.File({ filename: './logs/info.log', level: 'log' }),
+      new transports.File({ filename: './logs/info.log', level: 'info' }),
     ],
   }).log(logInfo);
 };

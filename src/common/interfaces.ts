@@ -33,26 +33,21 @@ interface IError {
 }
 
 export interface IRejection extends IError {
-  name: string;
-  stack: string | undefined;
-}
-
-export interface IUnhandled extends IError {
-  errorName: Error['name'];
-  errorStack: Error['stack'];
-}
-
-export interface IException extends IError {
   name: Error['name'];
   stack: Error['stack'];
+}
+
+export interface IUnhandled extends IRejection {}
+
+export interface IException extends IRejection {
   origin: string;
 }
 
 export interface IRequestResponse extends IError {
   message: string;
-  reqUrl: Request['originalUrl'];
-  reqParams: Request['params'] | string;
-  resStatus: Response['statusCode'];
-  reqBody?: Request['body'];
-  reqQuery?: Request['query'] | string;
+  originalUrl: Request['originalUrl'];
+  params: Request['params'] | string;
+  statusCode: Response['statusCode'];
+  body?: Request['body'];
+  query?: Request['query'] | string;
 }
