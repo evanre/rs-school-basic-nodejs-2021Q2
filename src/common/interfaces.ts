@@ -27,12 +27,32 @@ export interface IUser extends Omit<IEntity, 'title'> {
   password: string;
 }
 
-export interface IRequestResponse {
+interface IError {
   level: string;
-  reqUrl: Request['originalUrl'];
-  reqBody?: Request['body'];
-  reqParams: Request['params'] | string;
-  reqQuery?: Request['query'] | string;
-  resStatus: Response['statusCode'];
+  message: Error['message'];
+}
+
+export interface IRejection extends IError {
+  name: string;
+  stack: string | undefined;
+}
+
+export interface IUnhandled extends IError {
+  errorName: Error['name'];
+  errorStack: Error['stack'];
+}
+
+export interface IException extends IError {
+  name: Error['name'];
+  stack: Error['stack'];
+  origin: string;
+}
+
+export interface IRequestResponse extends IError {
   message: string;
+  reqUrl: Request['originalUrl'];
+  reqParams: Request['params'] | string;
+  resStatus: Response['statusCode'];
+  reqBody?: Request['body'];
+  reqQuery?: Request['query'] | string;
 }
