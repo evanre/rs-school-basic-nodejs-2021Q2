@@ -31,27 +31,27 @@ export const requestResponseHandler = (
 ): void => {
   logger({
     level: 'info',
-    reqUrl: originalUrl,
-    resStatus: statusCode,
-    message: 'Request-response log data',
-    reqBody: method === 'GET' ? '' : body,
-    reqParams: Object.values(params).length === 0 ? '' : params,
-    reqQuery: Object.values(query).length === 0 ? '' : query,
+    message: 'Request-response log info',
+    body: method === 'GET' ? '' : body,
+    originalUrl,
+    statusCode,
+    params,
+    query,
   });
 
   next();
 };
 
 export const unhandledError = (
-  { name: errorName, stack: errorStack, message }: Error,
+  { name, stack, message }: Error,
   _req: Request,
   res: Response
 ): void => {
-  res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(errorName);
+  res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(name);
   logger({
     level: 'error',
-    errorName,
-    errorStack,
+    name,
+    stack,
     message,
   });
 };
