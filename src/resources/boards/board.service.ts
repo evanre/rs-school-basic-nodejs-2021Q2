@@ -1,5 +1,5 @@
 import boardsRepo from './board.memory.repository';
-import { IBoard } from '../../common/types';
+import { IBoard } from '../../common/interfaces';
 
 /**
  * Returns the list of created boards

@@ -1,6 +1,6 @@
 import { boardsDB } from '../../common/memoDB';
 import tasksRepo from '../tasks/task.memory.repository';
-import { IBoard } from '../../common/types';
+import { IBoard } from '../../common/interfaces';
 
 /**
  * Returns the list of created boards

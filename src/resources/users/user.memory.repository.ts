@@ -1,6 +1,6 @@
 import { usersDB } from '../../common/memoDB';
 import tasksRepo from '../tasks/task.memory.repository';
-import { IUser } from '../../common/types';
+import { IUser } from '../../common/interfaces';
 
 /**
  * Returns the list of registered users

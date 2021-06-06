@@ -1,5 +1,5 @@
 import tasksRepo from './task.memory.repository';
-import { ITask } from '../../common/types';
+import { ITask } from '../../common/interfaces';
 
 /**
  * Returns the list of created tasks

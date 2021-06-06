@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
-import { ITask } from '../../common/types';
+import { ITask } from '../../common/interfaces';
 
-export default class Task {
+export default class Task implements ITask {
   id: string;
 
   title: string;

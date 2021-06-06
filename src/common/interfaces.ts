@@ -1,18 +1,17 @@
-export interface IColumn {
+export interface IEntity {
   id: string;
   title: string;
+}
+
+export interface IColumn extends IEntity {
   order: number;
 }
 
-export interface IBoard {
-  id: string;
-  title: string;
+export interface IBoard extends IEntity {
   columns: IColumn[] | [];
 }
 
-export interface ITask {
-  id: string;
-  title: string;
+export interface ITask extends IEntity {
   order: number;
   userId: string | null;
   boardId: string | null;
@@ -20,8 +19,7 @@ export interface ITask {
   description?: string;
 }
 
-export interface IUser {
-  id: string;
+export interface IUser extends Omit<IEntity, 'title'> {
   name: string;
   login: string;
   password: string;

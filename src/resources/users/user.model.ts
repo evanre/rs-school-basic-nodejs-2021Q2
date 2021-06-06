@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { randomUUID as uuid } from 'crypto';
-import { IUser } from '../../common/types';
+import { IUser } from '../../common/interfaces';
 
 export default class User implements IUser {
   id: string;

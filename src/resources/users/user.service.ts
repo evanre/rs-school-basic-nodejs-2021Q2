@@ -1,5 +1,5 @@
 import usersRepo from './user.memory.repository';
-import { IUser } from '../../common/types';
+import { IUser } from '../../common/interfaces';
 
 /**
  * Returns the list of registered users
