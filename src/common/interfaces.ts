@@ -27,23 +27,23 @@ export interface IUser extends Omit<IEntity, 'title'> {
   password: string;
 }
 
-interface IError {
+interface ILog {
   level: string;
   message: Error['message'];
+  stack?: Error['stack'];
 }
 
-export interface IRejection extends IError {
+export interface IUnhandledRejection extends ILog {
   name: Error['name'];
-  stack: Error['stack'];
 }
 
-export interface IUnhandled extends IRejection {}
+export interface IUnhandledError extends IUnhandledRejection {}
 
-export interface IException extends IRejection {
+export interface IUncaughtException extends IUnhandledRejection {
   origin: string;
 }
 
-export interface IRequestResponse extends IError {
+export interface IRequestResponse extends ILog {
   message: string;
   originalUrl: Request['originalUrl'];
   params: Request['params'] | string;

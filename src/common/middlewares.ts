@@ -3,14 +3,18 @@ import { StatusCodes } from 'http-status-codes';
 
 import { createLogger, format, transports } from 'winston';
 import {
+  IUnhandledRejection,
+  IUnhandledError,
+  IUncaughtException,
   IRequestResponse,
-  IException,
-  IRejection,
-  IUnhandled,
 } from './interfaces';
 
-export const logger = (
-  logInfo: IRequestResponse | IException | IRejection | IUnhandled
+const logger = (
+  logInfo:
+    | IUnhandledRejection
+    | IUnhandledError
+    | IUncaughtException
+    | IRequestResponse
 ): void => {
   const { combine, timestamp, prettyPrint } = format;
   createLogger({
@@ -24,14 +28,14 @@ export const logger = (
   }).log(logInfo);
 };
 
-export const requestResponseHandler = (
+export const requestResponse = (
   { originalUrl, method, body, params, query }: Request,
   { statusCode }: Response,
   next: NextFunction
 ): void => {
   logger({
     level: 'info',
-    message: 'Request-response log info',
+    message: 'Request-response',
     body: method === 'GET' ? '' : body,
     originalUrl,
     statusCode,
@@ -43,17 +47,20 @@ export const requestResponseHandler = (
 };
 
 export const unhandledError = (
-  { name, stack, message }: Error,
+  { message, stack, name }: Error,
   _req: Request,
   res: Response
 ): void => {
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(name);
   logger({
     level: 'error',
-    name,
-    stack,
     message,
+    stack,
+    name,
   });
+
+  // eslint-disable-next-line no-console
+  console.error(stack);
 };
 
 export const unhandledRejection = (
@@ -69,19 +76,24 @@ export const unhandledRejection = (
 
   // eslint-disable-next-line no-console
   console.error(rejectPromise);
+
+  process.exitCode = 1;
 };
 
 export const uncaughtException = (
-  { stack, message }: Error,
+  { message, stack }: Error,
   origin: string
 ) => {
   logger({
     level: 'error',
     name: 'uncaughtException',
-    origin,
-    stack,
     message,
+    stack,
+    origin,
   });
+
+  // eslint-disable-next-line no-console
+  console.error(stack);
 
   process.exitCode = 1;
 };
