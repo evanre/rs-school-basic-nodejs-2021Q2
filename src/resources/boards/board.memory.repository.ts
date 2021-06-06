@@ -10,14 +10,14 @@ const getAll = async () => boardsDB.getAll();
 
 /**
  * Returns the board information by given id
- * @param {String} id - a board's identifier
- * @returns {Object} - Board's information
+ * @param {string} id - a board's identifier
+ * @returns {object} - Board's information
  */
 const get = async (id: string) => boardsDB.get(id);
 
 /**
  * Removes the board by given id
- * @param {String} id - a board's identifier
+ * @param {string} id - a board's identifier
  * @returns {void} - Nothing
  */
 const remove = async (id: string) => {
@@ -27,15 +27,15 @@ const remove = async (id: string) => {
 
 /**
  * Creates a new board by given information
- * @param {Object} board - information for creation
- * @returns {Object} - Created board's information
+ * @param {object} board - information for creation
+ * @returns {object} - Created board's information
  */
 const create = async (board: IBoard) => boardsDB.create(board);
 
 /**
  * Updates a board by given information
- * @param {Object} board - information that need to be updated
- * @returns {Object} - Updated board's information
+ * @param {object} board - information that need to be updated
+ * @returns {object} - Updated board's information
  */
 const update = async (board: IBoard) => boardsDB.update(board);
 

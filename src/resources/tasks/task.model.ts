@@ -36,8 +36,8 @@ export default class Task {
 
   /**
    * Filters which data should be sent to response from User instance
-   * @param {Object} data — the task object
-   * @returns {Object} - Object with filtered properties.
+   * @param {object} data — the task object
+   * @returns {object} - Object with filtered properties.
    */
   static toResponse(data: ITask) {
     return data;
@@ -45,8 +45,8 @@ export default class Task {
 
   /**
    * Handles data from request and aligns it according to Task's model
-   * @param {Object} data — Passed task object
-   * @returns {Object} - Aligned Task instance.
+   * @param {object} data — Passed task object
+   * @returns {object} - Aligned Task instance.
    */
   static fromRequest(data: ITask) {
     return new Task(data);
