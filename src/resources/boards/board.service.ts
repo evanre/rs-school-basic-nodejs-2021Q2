@@ -1,5 +1,5 @@
 import boardsRepo from './board.memory.repository';
-import { IBoard } from '../../common/types';
+import { IBoard } from '../../common/interfaces';
 
 /**
  * Returns the list of created boards
@@ -9,29 +9,29 @@ const getAll = () => boardsRepo.getAll();
 
 /**
  * Returns the board information by given id
- * @param {String} id - a board's identifier
- * @returns {Object} - Board's information
+ * @param {string} id - a board's identifier
+ * @returns {object} - Board's information
  */
 const get = (id: string) => boardsRepo.get(id);
 
 /**
  * Removes the board by given id
- * @param {String} id - a board's identifier
+ * @param {string} id - a board's identifier
  * @returns {void} - Nothing
  */
 const remove = (id: string) => boardsRepo.remove(id);
 
 /**
  * Creates a new board by given information
- * @param {Object} board - information for creation
- * @returns {Object} - Created board's information
+ * @param {object} board - information for creation
+ * @returns {object} - Created board's information
  */
 const create = (board: IBoard) => boardsRepo.create(board);
 
 /**
  * Updates a board by given information
- * @param {Object} board - information that need to be updated
- * @returns {Object} - Updated board's information
+ * @param {object} board - information that need to be updated
+ * @returns {object} - Updated board's information
  */
 const update = (board: IBoard) => boardsRepo.update(board);
 

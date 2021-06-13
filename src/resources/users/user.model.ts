@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { randomUUID as uuid } from 'crypto';
-import { IUser } from '../../common/types';
+import { IUser } from '../../common/interfaces';
 
 export default class User implements IUser {
   id: string;
@@ -13,7 +13,7 @@ export default class User implements IUser {
 
   /**
    * @constructor
-   * @param {Id} [id] User id
+   * @param {string} [id] User id
    * @param {string} [name="USER"] User name
    * @param {string} [login="user"] User login
    * @param {string} [password="P@55w0rd"] User password
@@ -23,7 +23,7 @@ export default class User implements IUser {
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd',
-  } = {}) {
+  }: Partial<IUser>) {
     this.id = id;
     this.name = name;
     this.login = login;
@@ -32,19 +32,19 @@ export default class User implements IUser {
 
   /**
    * Filters which data should be sent to response from User instance
-   * @param {Object} User — the user object
-   * @returns {Object} - Object with filtered properties.
+   * @param {Omit<IUser, 'password'>} User — the user object
+   * @returns {object} - Object with filtered properties.
    */
-  static toResponse({ id, name, login }: IUser) {
+  static toResponse({ id, name, login }: Omit<IUser, 'password'>) {
     return { id, name, login };
   }
 
   /**
    * Handles data from request and aligns it according to User's model
-   * @param {Object} data — Passed user object
-   * @returns {Object} - Aligned User instance.
+   * @param {object} data — Passed user object
+   * @returns {object} - Aligned User instance.
    */
-  static fromRequest(data: IUser) {
+  static fromRequest(data: Partial<IUser>) {
     return new User(data);
   }
 }

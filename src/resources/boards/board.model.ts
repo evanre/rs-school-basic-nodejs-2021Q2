@@ -1,14 +1,20 @@
 import { randomUUID as uuid } from 'crypto';
-import { IBoard, IColumn } from '../../common/types';
+import { IBoard, IColumn } from '../../common/interfaces';
 
-export default class Board {
+export default class Board implements IBoard {
   id: string;
 
   title: string;
 
   columns: IColumn[];
 
-  constructor({ id = uuid(), title = 'TITLE', columns = [] }: IBoard) {
+  /**
+   * @constructor
+   * @param {string} [id] Board id
+   * @param {string} [title="TITLE"] Board title
+   * @param {string} [columns="[]"] Attached columns list
+   */
+  constructor({ id = uuid(), title = 'TITLE', columns = [] }: Partial<IBoard>) {
     this.id = id;
     this.title = title;
     this.columns = columns;
