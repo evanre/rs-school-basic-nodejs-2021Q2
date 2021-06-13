@@ -23,7 +23,7 @@ router.route('/:id').get(async ({ params }: Request, res: Response) => {
 router.route('/').post(async ({ body, params }: Request, res: Response) => {
   const { boardId } = params;
   const task = await tasksService.create(
-    Task.fromRequest({ ...body, boardId })
+    Task.fromRequest({ ...body, boardId }),
   );
 
   if (task) {

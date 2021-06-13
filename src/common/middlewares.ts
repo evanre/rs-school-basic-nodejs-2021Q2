@@ -14,7 +14,7 @@ const logger = (
     | IUnhandledRejection
     | IUnhandledError
     | IUncaughtException
-    | IRequestResponse
+    | IRequestResponse,
 ): void => {
   const { combine, timestamp, prettyPrint } = format;
   createLogger({
@@ -31,7 +31,7 @@ const logger = (
 export const requestResponse = (
   { originalUrl, method, body, params, query }: Request,
   { statusCode }: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   logger({
     level: 'info',
@@ -69,7 +69,7 @@ export const unhandledError = (
 
 export const unhandledRejection = (
   { message, stack }: Error,
-  rejectPromise: Promise<never>
+  rejectPromise: Promise<never>,
 ) => {
   logger({
     level: 'error',
@@ -86,7 +86,7 @@ export const unhandledRejection = (
 
 export const uncaughtException = (
   { message, stack }: Error,
-  origin: string
+  origin: string,
 ) => {
   logger({
     level: 'error',
