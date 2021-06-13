@@ -47,10 +47,12 @@ export const requestResponse = (
 };
 
 export const unhandledError = (
-  { message, stack, name }: Error,
+  err: Error,
   _req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction,
 ): void => {
+  const { message, stack, name } = err;
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(name);
   logger({
     level: 'error',
@@ -61,6 +63,8 @@ export const unhandledError = (
 
   // eslint-disable-next-line no-console
   console.error(stack);
+
+  next(err);
 };
 
 export const unhandledRejection = (
