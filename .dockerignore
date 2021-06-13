@@ -1,0 +1,11 @@
+node_modules
+build
+database
+
+logs
+jsdoc
+.github
+.vscode
+.idea
+.git
+.cache
