@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { ITask } from '../../common/interfaces';
+import { IUser, IBoard, IColumn, ITask } from '../../common/interfaces';
 
 export default class Task implements ITask {
   id: string;
@@ -10,11 +10,11 @@ export default class Task implements ITask {
 
   description: string | undefined;
 
-  userId: string | null;
+  userId: Pick<IUser, 'id'> | null;
 
-  boardId: string | null;
+  boardId: Pick<IBoard, 'id'> | null;
 
-  columnId: string | null;
+  columnId: Pick<IColumn, 'id'> | null;
 
   constructor({
     id = randomUUID(),

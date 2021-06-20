@@ -15,7 +15,7 @@ router
   })
 
   .post(async ({ body }: Request, res: Response) => {
-    const user = await usersService.create(User.fromRequest(body));
+    const user = await usersService.update(User.fromRequest(body));
 
     if (user) {
       res.status(CREATED).json(User.toResponse(user));

@@ -1,5 +1,10 @@
-import boardsRepo from './board.memory.repository';
+import { getConnection } from 'typeorm';
+import Repository from '../../common/repository';
+import Board from '../../entities/Board';
 import { IBoard } from '../../common/interfaces';
+import Task from '../../entities/Task';
+
+const boardsRepo = new Repository<IBoard>(Board);
 
 /**
  * Returns the list of created boards
@@ -19,20 +24,22 @@ const get = (id: string) => boardsRepo.get(id);
  * @param {string} id - a board's identifier
  * @returns {void} - Nothing
  */
-const remove = (id: string) => boardsRepo.remove(id);
+const remove = async (id: string) => {
+  await boardsRepo.remove(id);
+  // remove corresponding tasks with the board
+  await getConnection()
+    .createQueryBuilder()
+    .delete()
+    .from(Task)
+    .where(`boardId = :id`, { id })
+    .execute();
+};
 
 /**
- * Creates a new board by given information
- * @param {object} board - information for creation
- * @returns {object} - Created board's information
- */
-const create = (board: IBoard) => boardsRepo.create(board);
-
-/**
- * Updates a board by given information
+ * Creates or Updates a board by given information
  * @param {object} board - information that need to be updated
  * @returns {object} - Updated board's information
  */
 const update = (board: IBoard) => boardsRepo.update(board);
 
-export default { getAll, get, remove, create, update };
+export default { getAll, get, remove, update };

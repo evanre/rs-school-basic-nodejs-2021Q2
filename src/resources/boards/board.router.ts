@@ -15,7 +15,7 @@ router
   })
 
   .post(async ({ body }: Request, res: Response) => {
-    const board = await boardsService.create(Board.fromRequest(body));
+    const board = await boardsService.update(Board.fromRequest(body));
 
     if (board) {
       res.status(CREATED).json(Board.toResponse(board));

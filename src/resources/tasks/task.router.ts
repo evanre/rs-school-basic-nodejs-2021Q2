@@ -16,7 +16,7 @@ router
 
   .post(async ({ body, params }: Request, res: Response) => {
     const { boardId } = params;
-    const task = await tasksService.create(
+    const task = await tasksService.update(
       Task.fromRequest({ ...body, boardId }),
     );
 
