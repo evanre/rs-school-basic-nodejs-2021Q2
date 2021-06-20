@@ -5,34 +5,34 @@ networks:
     driver: bridge
 
 services:
-  node:
+  app:
+    container_name: nodejs
     build: .
-    image: evanre/rss-docker-basics-node
     ports:
     - ${PORT}:${PORT}
     depends_on:
-      - postgres
+      - db
     working_dir: /usr/app
+    env_file:
+      - ./.env
     volumes:
       - ./logs:/usr/app/logs
       - ./src:/usr/app/src
-    environment:
-      - PORT=${PORT}
     networks:
       - restapi_network
     restart: unless-stopped
 
-  postgres:
+  db:
+    container_name: ${DB_HOST}
     build: ./database/
-    image: evanre/rss-docker-basics-postgres
-    ports:
-    - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
-      - ${POSTGRES_DATA}:/var/lib/postgresql/data
+      - ${DB_DATA}:/var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:5432
     networks:
       - restapi_network
     restart: unless-stopped
