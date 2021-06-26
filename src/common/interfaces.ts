@@ -15,9 +15,9 @@ export interface IBoard extends IEntity {
 
 export interface ITask extends IEntity {
   order: number;
-  userId: string | null;
-  boardId: string | null;
-  columnId: string | null;
+  userId: Pick<IUser, 'id'> | null;
+  boardId: Pick<IBoard, 'id'> | null;
+  columnId: Pick<IColumn, 'id'> | null;
   description?: string;
 }
 

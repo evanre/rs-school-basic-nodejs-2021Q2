@@ -6,7 +6,7 @@ export default class Board implements IBoard {
 
   title: string;
 
-  columns: IColumn[];
+  columns: IColumn[] | [];
 
   /**
    * @constructor
