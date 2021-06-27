@@ -1,7 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { StatusCodes as Codes } from 'http-status-codes';
 import { createLogger, format, transports } from 'winston';
+import jwt from 'jsonwebtoken';
+import {
+  StatusCodes as Codes,
+  ReasonPhrases as Reasons,
+} from 'http-status-codes';
+
 import CustomError from './CustomError';
+import { JWT_SECRET_KEY } from './config';
 
 import {
   IUnhandledRejection,
@@ -105,4 +111,26 @@ export const wrongRouteHandler = (
   next: NextFunction,
 ): void => {
   next(new CustomError('Wrong route', Codes.NOT_FOUND));
+};
+
+export const checkAuthHandler = (
+  { headers: { authorization = '' } = {} }: Request,
+  _res: Response,
+  next: NextFunction,
+): void => {
+  try {
+    const [type, token] = authorization?.split(' ');
+    if (
+      !type ||
+      type !== 'Bearer' ||
+      !token ||
+      !jwt.verify(token, JWT_SECRET_KEY as string)
+    ) {
+      throw new CustomError(Reasons.UNAUTHORIZED, Codes.UNAUTHORIZED);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
