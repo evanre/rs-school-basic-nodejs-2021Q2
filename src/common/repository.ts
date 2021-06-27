@@ -1,44 +1,75 @@
-import { getRepository, EntityTarget, DeleteResult } from 'typeorm';
+import { getRepository, EntityTarget, DeepPartial } from 'typeorm';
+import { NextFunction, Request, Response } from 'express';
+import { StatusCodes as Codes } from 'http-status-codes';
+import CustomError from './CustomError';
 
-export default class Repo<T> {
-  entity: EntityTarget<T>;
+interface IEntityMethods<T> {
+  toResponse: (data: T) => DeepPartial<T>;
 
-  constructor(entity: EntityTarget<T>) {
-    this.entity = entity;
+  fromRequest: (data: DeepPartial<T>) => DeepPartial<T>;
+}
+
+export default class Repo<T extends IEntityMethods<T>> {
+  instance: T & EntityTarget<T>;
+
+  constructor(instance: T & EntityTarget<T>) {
+    this.instance = instance;
   }
 
-  /**
-   * Returns the list of all entities
-   * @returns {Array} - List of entities
-   */
-  getAll(conditions?: object): Promise<T[]> {
-    return getRepository(this.entity).find(conditions);
-  }
+  getAll = async (
+    _req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> =>
+    getRepository(this.instance)
+      .find()
+      .then((entities) => {
+        if (!entities) throw new CustomError('Bad request', Codes.BAD_REQUEST);
+        res.status(Codes.OK).json(entities.map(this.instance.toResponse));
+      })
+      .catch((error) => next(error));
 
-  /**
-   * Returns the entity by given id
-   * @param {string} id - entity's identifier
-   * @returns {object | undefined} - entity's information
-   */
-  get(id: string): Promise<T | undefined> {
-    return getRepository(this.entity).findOne(id);
-  }
+  get = async (
+    { params: { id } = {} }: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> =>
+    getRepository(this.instance)
+      .findOne(id)
+      .then((entity) => {
+        if (!entity) throw new CustomError('Not found', Codes.NOT_FOUND);
+        res.status(Codes.OK).json(this.instance.toResponse(entity));
+      })
+      .catch((error) => next(error));
 
-  /**
-   * Updates or Creates the entity by given signature
-   * @param {object} entity - entity's identifier
-   * @returns {object} - entity's information
-   */
-  async update(entity: T) {
-    return getRepository(this.entity).save(entity);
-  }
+  save = async (
+    { body, method, params = {} }: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> =>
+    getRepository(this.instance)
+      .save({ ...body, ...params })
+      .then((entity) => {
+        if (!entity) throw new CustomError('Bad request', Codes.BAD_REQUEST);
+        res
+          .status(Codes[method === 'PUT' ? 'OK' : 'CREATED'])
+          .json(this.instance.toResponse(entity));
+      })
+      .catch((error) => next(error));
 
-  /**
-   * Removes the entity by given type, and it's id
-   * @param {string} id - entity's identifier
-   * @returns {void} - Nothing
-   */
-  remove(id: string): Promise<DeleteResult> {
-    return getRepository(this.entity).delete(id);
-  }
+  delete = async (
+    { params: { id = '' } = {} }: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> =>
+    getRepository(this.instance)
+      .findOne(id)
+      .then((entity) => {
+        if (!entity) throw new CustomError('Not found', Codes.NOT_FOUND);
+        return getRepository(this.instance).delete(id);
+      })
+      .then(() => {
+        res.status(Codes.NO_CONTENT).send({ message: 'DELETED' });
+      })
+      .catch((error) => next(error));
 }

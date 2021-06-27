@@ -1,12 +1,13 @@
-import { PORT, CONNECTION } from './common/config';
-import { Database } from './common/db';
-import app from './app';
+import { createConnection } from 'typeorm';
+import ormConfig, { PORT } from './common/config';
+import { app } from './app';
 
-const db = new Database();
-
-db.getConnection(CONNECTION!).then(() => {
-  app.listen(PORT, () =>
-    // eslint-disable-next-line no-console
-    console.log(`App is running on http://localhost:${PORT}`),
-  );
-});
+createConnection(ormConfig)
+  .then(() => {
+    app.listen(PORT, () =>
+      // eslint-disable-next-line no-console
+      console.log(`App is running on http://localhost:${PORT}`),
+    );
+  })
+  // eslint-disable-next-line no-console
+  .catch((err) => console.error(err));

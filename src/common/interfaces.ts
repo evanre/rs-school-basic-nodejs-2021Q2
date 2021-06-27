@@ -2,18 +2,20 @@ import { Request, Response } from 'express';
 
 export interface IEntity {
   id: string;
-  title: string;
 }
 
 export interface IColumn extends IEntity {
+  title: string;
   order: number;
 }
 
 export interface IBoard extends IEntity {
-  columns: IColumn[] | [];
+  title: string;
+  columns: [];
 }
 
 export interface ITask extends IEntity {
+  title: string;
   order: number;
   userId: Pick<IUser, 'id'> | null;
   boardId: Pick<IBoard, 'id'> | null;
@@ -21,7 +23,7 @@ export interface ITask extends IEntity {
   description?: string;
 }
 
-export interface IUser extends Omit<IEntity, 'title'> {
+export interface IUser extends IEntity {
   name: string;
   login: string;
   password: string;

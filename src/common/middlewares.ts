@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { StatusCodes } from 'http-status-codes';
-
+import { StatusCodes as Codes } from 'http-status-codes';
 import { createLogger, format, transports } from 'winston';
+import CustomError from './CustomError';
+
 import {
   IUnhandledRejection,
   IUnhandledError,
@@ -46,14 +47,12 @@ export const requestResponse = (
   next();
 };
 
-export const unhandledError = (
-  err: Error,
+export const errorHandler = (
+  { message, statusCode, stack, name }: CustomError,
   _req: Request,
   res: Response,
-  next: NextFunction,
 ): void => {
-  const { message, stack, name } = err;
-  res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(name);
+  res.status(statusCode).json(message);
   logger({
     level: 'error',
     message,
@@ -63,11 +62,9 @@ export const unhandledError = (
 
   // eslint-disable-next-line no-console
   console.error(stack);
-
-  next(err);
 };
 
-export const unhandledRejection = (
+export const unhandledRejectionHandler = (
   { message, stack }: Error,
   rejectPromise: Promise<never>,
 ) => {
@@ -84,7 +81,7 @@ export const unhandledRejection = (
   process.exitCode = 1;
 };
 
-export const uncaughtException = (
+export const uncaughtExceptionHandler = (
   { message, stack }: Error,
   origin: string,
 ) => {
@@ -100,4 +97,12 @@ export const uncaughtException = (
   console.error(stack);
 
   process.exitCode = 1;
+};
+
+export const wrongRouteHandler = (
+  _req: Request,
+  _res: Response,
+  next: NextFunction,
+): void => {
+  next(new CustomError('Wrong route', Codes.NOT_FOUND));
 };

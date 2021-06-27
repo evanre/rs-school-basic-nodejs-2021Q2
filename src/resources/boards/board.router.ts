@@ -1,55 +1,15 @@
-import { Router, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import { Router } from 'express';
+import Repo from '../../common/repository';
 import Board from './board.model';
-import boardsService from './board.service';
 
-const router = Router();
-const { OK, CREATED, NOT_FOUND, NO_CONTENT } = StatusCodes;
+const boardsRepo = new Repo(Board);
 
-router
-  .route('/')
+export const router = Router();
 
-  .get(async (_: Request, res: Response) => {
-    const boards = await boardsService.getAll();
-    res.status(OK).json(boards.map(Board.toResponse));
-  })
-
-  .post(async ({ body }: Request, res: Response) => {
-    const board = await boardsService.update(Board.fromRequest(body));
-
-    if (board) {
-      res.status(CREATED).json(Board.toResponse(board));
-    } else {
-      res.status(NOT_FOUND).json('Not found');
-    }
-  });
+router.route('/').get(boardsRepo.getAll).post(boardsRepo.save);
 
 router
   .route('/:id')
-
-  .get(async ({ params }: Request, res: Response) => {
-    const { id = '' } = params;
-    const board = await boardsService.get(id);
-    if (board) {
-      res.json(Board.toResponse(board));
-    } else {
-      res.status(NOT_FOUND).json('Not found');
-    }
-  })
-
-  .put(async ({ params, body }: Request, res: Response) => {
-    const { id } = params;
-    const board = Board.fromRequest({ ...body, id });
-    await boardsService.update(board);
-
-    res.status(OK).json(board);
-  })
-
-  .delete(async ({ params }: Request, res: Response) => {
-    const { id = '' } = params;
-    await boardsService.remove(id);
-
-    res.status(NO_CONTENT).send({ message: 'DELETED' });
-  });
-
-export default router;
+  .get(boardsRepo.get)
+  .put(boardsRepo.save)
+  .delete(boardsRepo.delete);

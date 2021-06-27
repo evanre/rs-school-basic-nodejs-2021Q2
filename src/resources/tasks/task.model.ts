@@ -1,54 +1,57 @@
-import { randomUUID } from 'crypto';
+import { Column as Col, Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { IUser, IBoard, IColumn, ITask } from '../../common/interfaces';
+import Particle from '../../common/Particle';
 
-export default class Task implements ITask {
-  id: string;
+@Entity()
+export default class Task extends Particle implements ITask {
+  @Col('varchar')
+  title!: string;
 
-  title: string;
+  @Col('smallint')
+  order!: number;
 
-  order: number;
+  @Col('varchar')
+  description!: string;
 
-  description: string | undefined;
+  @ManyToOne('User', 'id', {
+    cascade: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'userId' })
+  @Col('varchar', { nullable: true })
+  userId!: Pick<IUser, 'id'> | null;
 
-  userId: Pick<IUser, 'id'> | null;
+  @ManyToOne('Board', 'id', {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'boardId' })
+  @Col('varchar', { nullable: true })
+  boardId!: Pick<IBoard, 'id'> | null;
 
-  boardId: Pick<IBoard, 'id'> | null;
-
-  columnId: Pick<IColumn, 'id'> | null;
+  @Col('varchar', { nullable: true })
+  columnId!: Pick<IColumn, 'id'> | null;
 
   constructor({
-    id = randomUUID(),
-    title = id,
+    id,
+    title = 'title',
     order = NaN,
     description = '',
-    userId,
-    boardId,
-    columnId,
-  }: ITask) {
-    this.id = id;
+    userId = null,
+    boardId = null,
+    columnId = null,
+  }: Partial<ITask> = {}) {
+    super({ id });
+
     this.title = title;
     this.order = order;
     this.description = description;
     this.userId = userId;
     this.boardId = boardId;
     this.columnId = columnId;
-  }
-
-  /**
-   * Filters which data should be sent to response from User instance
-   * @param {object} data — the task object
-   * @returns {object} - Object with filtered properties.
-   */
-  static toResponse(data: ITask) {
-    return data;
-  }
-
-  /**
-   * Handles data from request and aligns it according to Task's model
-   * @param {object} data — Passed task object
-   * @returns {object} - Aligned Task instance.
-   */
-  static fromRequest(data: ITask) {
-    return new Task(data);
   }
 }
