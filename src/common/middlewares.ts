@@ -57,6 +57,7 @@ export const errorHandler = (
   { message, statusCode, stack, name }: CustomError,
   _req: Request,
   res: Response,
+  _next: NextFunction,
 ): void => {
   res.status(statusCode).json(message);
   logger({

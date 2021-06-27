@@ -8,7 +8,7 @@ export default class User extends Particle implements IUser {
   @Col('varchar')
   public name!: string;
 
-  @Col('varchar')
+  @Col('varchar', { unique: true })
   public login!: string;
 
   @Col('varchar')
