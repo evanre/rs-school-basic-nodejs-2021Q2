@@ -59,7 +59,7 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction,
 ): void => {
-  res.status(statusCode).json(message);
+  res.status(statusCode || Codes.INTERNAL_SERVER_ERROR).json(message);
   logger({
     level: 'error',
     message,
@@ -111,7 +111,7 @@ export const wrongRouteHandler = (
   _res: Response,
   next: NextFunction,
 ): void => {
-  next(new CustomError('Wrong route', Codes.NOT_FOUND));
+  next(new CustomError(Reasons.NOT_FOUND, Codes.NOT_FOUND));
 };
 
 export const checkAuthHandler = (
@@ -127,11 +127,11 @@ export const checkAuthHandler = (
       !token ||
       !jwt.verify(token, JWT_SECRET_KEY as string)
     ) {
-      throw new CustomError(Reasons.UNAUTHORIZED, Codes.UNAUTHORIZED);
+      throw new Error();
     }
 
     next();
-  } catch (error) {
-    next(error);
+  } catch (_) {
+    next(new CustomError(Reasons.UNAUTHORIZED, Codes.UNAUTHORIZED));
   }
 };

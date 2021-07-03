@@ -18,6 +18,9 @@ router
   .post(async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { login, password } = req.body;
+      if (!login || !password)
+        throw new CustomError(Reasons.BAD_REQUEST, Codes.BAD_REQUEST);
+
       const user = await getRepository(User).findOne({ where: { login } });
       if (!user)
         throw new CustomError(Reasons.UNAUTHORIZED, Codes.UNAUTHORIZED);
@@ -26,10 +29,10 @@ router
         throw new CustomError(Reasons.FORBIDDEN, Codes.FORBIDDEN);
 
       const token = jwt.sign({ id: user.id, login }, JWT_SECRET_KEY as string, {
-        expiresIn: 60 * 60 * 24 * 90, // 90 days
+        expiresIn: '24h',
       });
       res.json({ token });
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      next(new CustomError(err.message, err.statusCode || Codes.UNAUTHORIZED));
     }
   });

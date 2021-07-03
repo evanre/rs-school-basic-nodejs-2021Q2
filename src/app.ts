@@ -39,7 +39,7 @@ app.use('/', (req, res, next) => {
 app.use(requestResponse);
 
 app.use('/login', loginRouter);
-app.use(checkAuthHandler);
+app.use(checkAuthHandler); // All following routes require authentication
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards/:boardId/tasks', taskRouter);

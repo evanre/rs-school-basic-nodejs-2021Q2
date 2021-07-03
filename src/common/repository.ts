@@ -53,7 +53,7 @@ export default class Repo<T extends IEntityMethods<T>> {
     next: NextFunction,
   ): Promise<void> =>
     getRepository(this.instance)
-      .save({ ...body, ...params })
+      .save(this.instance.fromRequest({ ...body, ...params }))
       .then((entity) => {
         if (!entity)
           throw new CustomError(Reasons.BAD_REQUEST, Codes.BAD_REQUEST);
@@ -75,7 +75,7 @@ export default class Repo<T extends IEntityMethods<T>> {
         return getRepository(this.instance).delete(id);
       })
       .then(() => {
-        res.status(Codes.NO_CONTENT).send({ message: 'DELETED' });
+        res.status(Codes.NO_CONTENT).send({ message: Reasons.NO_CONTENT });
       })
       .catch((error) => next(error));
 }
