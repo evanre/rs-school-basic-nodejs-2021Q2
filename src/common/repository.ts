@@ -1,6 +1,10 @@
 import { getRepository, EntityTarget, DeepPartial } from 'typeorm';
 import { NextFunction, Request, Response } from 'express';
-import { StatusCodes as Codes } from 'http-status-codes';
+import {
+  StatusCodes as Codes,
+  ReasonPhrases as Reasons,
+} from 'http-status-codes';
+
 import CustomError from './CustomError';
 
 interface IEntityMethods<T> {
@@ -24,7 +28,8 @@ export default class Repo<T extends IEntityMethods<T>> {
     getRepository(this.instance)
       .find()
       .then((entities) => {
-        if (!entities) throw new CustomError('Bad request', Codes.BAD_REQUEST);
+        if (!entities)
+          throw new CustomError(Reasons.BAD_REQUEST, Codes.BAD_REQUEST);
         res.status(Codes.OK).json(entities.map(this.instance.toResponse));
       })
       .catch((error) => next(error));
@@ -37,7 +42,7 @@ export default class Repo<T extends IEntityMethods<T>> {
     getRepository(this.instance)
       .findOne(id)
       .then((entity) => {
-        if (!entity) throw new CustomError('Not found', Codes.NOT_FOUND);
+        if (!entity) throw new CustomError(Reasons.NOT_FOUND, Codes.NOT_FOUND);
         res.status(Codes.OK).json(this.instance.toResponse(entity));
       })
       .catch((error) => next(error));
@@ -50,7 +55,8 @@ export default class Repo<T extends IEntityMethods<T>> {
     getRepository(this.instance)
       .save({ ...body, ...params })
       .then((entity) => {
-        if (!entity) throw new CustomError('Bad request', Codes.BAD_REQUEST);
+        if (!entity)
+          throw new CustomError(Reasons.BAD_REQUEST, Codes.BAD_REQUEST);
         res
           .status(Codes[method === 'PUT' ? 'OK' : 'CREATED'])
           .json(this.instance.toResponse(entity));
@@ -65,7 +71,7 @@ export default class Repo<T extends IEntityMethods<T>> {
     getRepository(this.instance)
       .findOne(id)
       .then((entity) => {
-        if (!entity) throw new CustomError('Not found', Codes.NOT_FOUND);
+        if (!entity) throw new CustomError(Reasons.NOT_FOUND, Codes.NOT_FOUND);
         return getRepository(this.instance).delete(id);
       })
       .then(() => {

@@ -19,7 +19,6 @@ services:
       - ./logs:/usr/app/logs
       - ./src:/usr/app/src
       - ./package.json:/usr/app/package.json
-    command: /bin/sh -c "npm run migration:run && npm run dev"
     networks:
       - restapi_network
     restart: unless-stopped
