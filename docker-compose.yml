@@ -5,35 +5,33 @@ networks:
     driver: bridge
 
 services:
-  app:
-    container_name: nodejs
-    build: .
-    ports:
-    - ${PORT}:${PORT}
-    depends_on:
-      - db
-    working_dir: /usr/app
+#  app:
+#    container_name: nodejs
+#    build: .
+#    ports:
+#    - ${PORT}:${PORT}
+#    depends_on:
+#      - db
+#    working_dir: /usr/app
+#    env_file:
+#      - ./.env
+#    volumes:
+#      - ./logs:/usr/app/logs
+#      - ./src:/usr/app/src
+#      - ./package.json:/usr/app/package.json
+#    networks:
+#      - restapi_network
+#    restart: unless-stopped
+
+  db:
+    image: postgres:alpine
+    container_name: ${POSTGRES_HOST}
     env_file:
       - ./.env
     volumes:
-      - ./logs:/usr/app/logs
-      - ./src:/usr/app/src
-      - ./package.json:/usr/app/package.json
-    networks:
-      - restapi_network
-    restart: unless-stopped
-
-  db:
-    container_name: ${DB_HOST}
-    build: ./database/
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-    volumes:
-      - ${DB_DATA}:/var/lib/postgresql/data
+      - ${POSTGRES_DATA}:/var/lib/postgresql/data
     ports:
-      - ${DB_PORT}:5432
+      - ${POSTGRES_PORT}:5432
     networks:
       - restapi_network
     restart: unless-stopped
