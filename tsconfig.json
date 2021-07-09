@@ -1,17 +1,12 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
     "moduleResolution": "node",
-    "outDir": "./build",
-    "rootDir": "./src",
-    "sourceMap": true,
     "target": "es6",
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "allowJs": false,
     "downlevelIteration": false,
-    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -23,8 +18,9 @@
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "baseUrl": "./",
     "incremental": true
-  },
-  "exclude": ["node_modules"],
-  "include": ["./src/**/*.ts"]
+  }
 }

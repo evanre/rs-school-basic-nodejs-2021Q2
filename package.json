@@ -6,7 +6,7 @@
     "url": "https://github.com/evanre/rs-school-basic-nodejs-2021Q2"
   },
   "description": "REST service starter for RS School",
-  "main": "build/server.js",
+  "main": "dist/main.js",
   "scripts": {
     "doc": "jsdoc -d jsdoc -r -c jsdoc.json",
     "start:dev": "nest start --watch",
