@@ -1,4 +1,5 @@
 # RS School REST service
+A Nest.js project
 
 ## Prerequisites
 
