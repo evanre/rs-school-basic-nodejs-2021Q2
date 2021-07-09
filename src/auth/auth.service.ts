@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   async register(userDto: UserDto) {
-    const candidate = await this.userService.getOneUserByLogin(userDto.login);
+    const candidate = await this.userService.getUserByLogin(userDto.login);
     if (candidate) {
       throw new HttpException(
         'Bad request. Already exists',
@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   private async validateUser({ login, password }: LoginDto) {
-    const user = await this.userService.getOneUserByLogin(login);
+    const user = await this.userService.getUserByLogin(login);
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }

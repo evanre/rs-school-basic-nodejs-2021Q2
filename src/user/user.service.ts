@@ -30,11 +30,11 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async getOneUser(id: string): Promise<User | undefined> {
+  async getUser(id: string): Promise<User | undefined> {
     return await this.userRepository.findOne(id);
   }
 
-  async getOneUserByLogin(login: string): Promise<User | undefined> {
+  async getUserByLogin(login: string): Promise<User | undefined> {
     return await this.userRepository.findOne({ where: { login } });
   }
 

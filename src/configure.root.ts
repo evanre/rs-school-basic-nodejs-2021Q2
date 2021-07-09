@@ -1,6 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { User } from './user/user.entity';
+import { Board } from './board/board.entity';
 
 export const configModule = ConfigModule.forRoot({
   envFilePath: '.env',
@@ -9,8 +10,12 @@ export const configModule = ConfigModule.forRoot({
 
 export const { JWT_SECRET, PORT } = process.env;
 
-const { POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } =
-  process.env;
+const {
+  POSTGRES_PORT,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+} = process.env;
 // todo: replace POSTGRES_HOST when setup docker for nodejs
 const POSTGRES_HOST = 'localhost';
 
@@ -21,7 +26,7 @@ export const ormConfig = {
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
-  entities: [User],
+  entities: [User, Board],
   // migrations: ['src/migrations/*.ts'],
   // synchronize: false,
   synchronize: true,
