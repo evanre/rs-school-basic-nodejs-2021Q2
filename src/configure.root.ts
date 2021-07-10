@@ -1,14 +1,13 @@
+import { join } from 'path';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { User } from './user/user.entity';
-import { Board } from './board/board.entity';
 
 export const configModule = ConfigModule.forRoot({
   envFilePath: '.env',
   isGlobal: true,
 });
 
-export const { JWT_SECRET, PORT } = process.env;
+export const { JWT_SECRET, PORT, OPEN_ENDPOINTS } = process.env;
 
 const {
   POSTGRES_PORT,
