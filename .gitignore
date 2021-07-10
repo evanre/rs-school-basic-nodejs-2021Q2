@@ -4,7 +4,7 @@
 /express
 /jsdoc
 /node_modules
-/database/data
+/database
 
 # Env
 .env

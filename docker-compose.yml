@@ -5,23 +5,23 @@ networks:
     driver: bridge
 
 services:
-#  app:
-#    container_name: nodejs
-#    build: .
-#    ports:
-#    - ${PORT}:${PORT}
-#    depends_on:
-#      - db
-#    working_dir: /usr/app
-#    env_file:
-#      - ./.env
-#    volumes:
-#      - ./logs:/usr/app/logs
-#      - ./src:/usr/app/src
-#      - ./package.json:/usr/app/package.json
-#    networks:
-#      - restapi_network
-#    restart: unless-stopped
+  app:
+    container_name: nodejs
+    build: .
+    ports:
+    - ${PORT}:${PORT}
+    depends_on:
+      - db
+    working_dir: /usr/app
+    env_file:
+      - ./.env
+    volumes:
+      - ./logs:/usr/app/logs
+      - ./src:/usr/app/src
+      - ./package.json:/usr/app/package.json
+    networks:
+      - restapi_network
+    restart: unless-stopped
 
   db:
     image: postgres:alpine
