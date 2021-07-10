@@ -4,6 +4,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { PORT } from './configure.root';
 import { ValidationPipe } from './common/validation.pipe';
+import { uncaughtExceptionHandler } from './common/uncaughtExceptionHandler';
+
+process.on('uncaughtException', uncaughtExceptionHandler);
 
 async function start() {
   const app = await NestFactory.create(AppModule);
