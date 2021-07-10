@@ -7,7 +7,7 @@ export const configModule = ConfigModule.forRoot({
   isGlobal: true,
 });
 
-export const { JWT_SECRET, PORT, OPEN_ENDPOINTS } = process.env;
+export const { JWT_SECRET, PORT, OPEN_ENDPOINTS, USE_FASTIFY } = process.env;
 
 const {
   POSTGRES_HOST,

@@ -14,11 +14,9 @@ import { fileLog } from './fileLog';
 export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const now = Date.now();
-
-    const { method, url, body, query } = context
-      .switchToHttp()
-      .getRequest<Request>();
-    const { statusCode } = context.switchToHttp().getResponse<Response>();
+    const ctx = context.switchToHttp();
+    const { method, url, body, query } = ctx.getRequest<Request>();
+    const { statusCode } = ctx.getResponse<Response>();
 
     return next.handle().pipe(
       tap(() => {

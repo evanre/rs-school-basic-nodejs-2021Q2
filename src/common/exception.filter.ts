@@ -11,7 +11,7 @@ import { fileLog } from './fileLog';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -36,6 +36,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     process.stdout.write(logObjectStringified);
     fileLog('errors', logObjectStringified);
 
-    response.status(logObject.status).json(logObject);
+    response.status(logObject.status).send(logObject);
   }
 }

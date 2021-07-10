@@ -15,11 +15,10 @@ export class AuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const {
-      headers: { authorization = '' } = {},
-      path,
-    } = context.switchToHttp().getRequest();
-    if (OPEN_ENDPOINTS.includes(path)) {
+    const { headers: { authorization = '' } = {}, url } = context
+      .switchToHttp()
+      .getRequest();
+    if (OPEN_ENDPOINTS.includes(url)) {
       return true;
     }
 
