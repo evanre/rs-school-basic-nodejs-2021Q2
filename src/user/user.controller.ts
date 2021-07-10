@@ -1,49 +1,73 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
   Put,
-  UseGuards,
+  HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
+
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { UserDto, UserIdDto } from './user.dtos';
 import { UserService } from './user.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
 @ApiTags('Users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @ApiOperation({ summary: 'Create a new user' })
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: HttpStatus.OK, type: User })
   @Post()
-  save(@Body() userDto: UserDto) {
-    return this.userService.saveUser(userDto);
+  async save(@Body() userDto: UserDto) {
+    const user = await this.userService.save(userDto);
+    return this.userService.toResponse(user);
   }
 
   @ApiOperation({ summary: 'Update a user by id' })
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: HttpStatus.OK, type: User })
   @Put(':id')
-  update(@Param() { id }: UserIdDto, @Body() userDto: UserDto) {
-    return this.userService.saveUser({ ...userDto, id });
+  async update(@Param() { id }: UserIdDto, @Body() userDto: UserDto) {
+    const user = await this.userService.save({ ...userDto, id });
+    return this.userService.toResponse(user);
   }
 
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: HttpStatus.OK, type: [User] })
   @Get()
-  getAll() {
-    return this.userService.getAllUsers();
+  async getAll() {
+    const users = await this.userService.getAll();
+    return users.map((user) => this.userService.toResponse(user));
   }
 
   @ApiOperation({ summary: 'Get a single user' })
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: HttpStatus.OK, type: User })
   @Get(':id')
-  get(@Param() { id }: UserIdDto) {
-    return this.userService.getUser(id);
+  async get(@Param() { id }: UserIdDto) {
+    const user = await this.userService.get(id);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return this.userService.toResponse(user);
+  }
+
+  @ApiOperation({ summary: 'Remove user' })
+  @ApiResponse({ status: HttpStatus.NO_CONTENT })
+  @Delete(':id')
+  async remove(@Param() { id }: UserIdDto) {
+    const user = await this.userService.get(id);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return this.userService.remove(id);
   }
 }

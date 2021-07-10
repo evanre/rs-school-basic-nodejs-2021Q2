@@ -13,19 +13,19 @@ export class BoardService {
     private boardRepository: Repository<Board>,
   ) {}
 
-  async saveBoard(boardDto: BoardDto): Promise<IBoard> {
+  async save(boardDto: BoardDto): Promise<IBoard> {
     return await this.boardRepository.save(boardDto);
   }
 
-  async getAllBoards(): Promise<Board[]> {
+  async getAll(): Promise<Board[]> {
     return await this.boardRepository.find();
   }
 
-  async getBoard(id: string): Promise<Board | undefined> {
-    return await this.boardRepository.findOne(id);
+  async get(value: string, param = 'id'): Promise<Board | undefined> {
+    return await this.boardRepository.findOne({ where: { [param]: value } });
   }
 
-  async removeBoard(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.boardRepository.delete(id);
   }
 }

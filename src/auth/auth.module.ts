@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
@@ -7,7 +7,7 @@ import { JWT_SECRET } from '../configure.root';
 
 @Module({
   imports: [
-    forwardRef(() => UserModule),
+    UserModule,
     JwtModule.register({
       secret: JWT_SECRET,
       signOptions: {

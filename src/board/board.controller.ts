@@ -1,49 +1,68 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
   Put,
-  UseGuards,
+  HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { BoardDto, BoardIdDto } from './board.dtos';
 import { BoardService } from './board.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Board } from './board.entity';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
 @Controller('boards')
-@UseGuards(JwtAuthGuard)
 @ApiTags('Boards')
 export class BoardController {
   constructor(private boardService: BoardService) {}
 
   @ApiOperation({ summary: 'Create a new board' })
-  @ApiResponse({ status: 200, type: Board })
+  @ApiResponse({ status: HttpStatus.OK, type: Board })
   @Post()
   save(@Body() boardDto: BoardDto) {
-    return this.boardService.saveBoard(boardDto);
+    return this.boardService.save(boardDto);
   }
 
   @ApiOperation({ summary: 'Update a board by id' })
-  @ApiResponse({ status: 200, type: Board })
+  @ApiResponse({ status: HttpStatus.OK, type: Board })
   @Put(':id')
   update(@Param() { id }: BoardIdDto, @Body() boardDto: BoardDto) {
-    return this.boardService.saveBoard({ ...boardDto, id });
+    return this.boardService.save({ ...boardDto, id });
   }
 
   @ApiOperation({ summary: 'Get all boards' })
-  @ApiResponse({ status: 200, type: [Board] })
+  @ApiResponse({ status: HttpStatus.OK, type: [Board] })
   @Get()
   getAll() {
-    return this.boardService.getAllBoards();
+    return this.boardService.getAll();
   }
 
   @ApiOperation({ summary: 'Get a single board' })
-  @ApiResponse({ status: 200, type: Board })
+  @ApiResponse({ status: HttpStatus.OK, type: Board })
   @Get(':id')
-  get(@Param() { id }: BoardIdDto) {
-    return this.boardService.getBoard(id);
+  async get(@Param() { id }: BoardIdDto) {
+    const board = await this.boardService.get(id);
+
+    if (!board) {
+      throw new NotFoundException();
+    }
+
+    return board;
+  }
+
+  @ApiOperation({ summary: 'Remove board' })
+  @ApiResponse({ status: HttpStatus.NO_CONTENT })
+  @Delete(':id')
+  async remove(@Param() { id }: BoardIdDto) {
+    const board = await this.boardService.get(id);
+
+    if (!board) {
+      throw new NotFoundException();
+    }
+    return this.boardService.remove(id);
   }
 }

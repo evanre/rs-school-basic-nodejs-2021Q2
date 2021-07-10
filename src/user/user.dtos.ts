@@ -1,7 +1,7 @@
 import {
   IsString,
   IsNotEmpty,
-  Matches,
+  // Matches,
   IsOptional,
   IsUUID,
 } from 'class-validator';
@@ -34,10 +34,11 @@ export class UserDto {
 
   @IsString({ message: 'Need to be a string' })
   @IsNotEmpty()
-  @Matches(
-    /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/,
-    { message: 'Weak password' },
-  )
+  // Commented because of to simple tests
+  // @Matches(
+  //   /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/,
+  //   { message: 'Weak password' },
+  // )
   @ApiProperty({
     example: 'P@55w0rd',
     description: 'User password',

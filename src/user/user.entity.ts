@@ -11,14 +11,14 @@ export class User implements IUser {
   })
   public id!: string;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiPropertyOptional({
     example: 'Ivan Ivanov',
     description: 'User full name',
   })
   public name?: string;
 
-  @Column({ unique: true })
+  @Column()
   @ApiProperty({
     example: 'ivan2112',
     description: 'User login',

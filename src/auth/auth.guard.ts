@@ -7,15 +7,22 @@ import {
 import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 
+import { OPEN_ENDPOINTS } from '../configure.root';
+
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const { headers: { authorization = '' } = {} } = context
-      .switchToHttp()
-      .getRequest();
+    const {
+      headers: { authorization = '' } = {},
+      path,
+    } = context.switchToHttp().getRequest();
+    if (OPEN_ENDPOINTS.includes(path)) {
+      return true;
+    }
+
     try {
       const [type, token] = authorization.split(' ');
       if (

@@ -18,7 +18,6 @@ export class BoardDto {
   })
   readonly title!: string;
 
-  @IsString({ message: 'Need to be a string' })
   @IsOptional()
   @ApiPropertyOptional({
     example: '[{id: "alsdkfj", "Column name"}]',

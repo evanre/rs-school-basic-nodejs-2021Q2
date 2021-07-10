@@ -25,26 +25,26 @@ export class AuthService {
   }
 
   async register(userDto: UserDto) {
-    const candidate = await this.userService.getUserByLogin(userDto.login);
+    const candidate = await this.userService.get(userDto.login, 'login');
     if (candidate) {
       throw new HttpException(
         'Bad request. Already exists',
         HttpStatus.BAD_REQUEST,
       );
     }
-    const user = await this.userService.saveUser(userDto);
+    const user = await this.userService.save(userDto);
 
     return this.generateToken(user);
   }
 
-  private async generateToken({ login, id }: IUser) {
+  private async generateToken({ login, id }: Partial<IUser>) {
     return {
       token: this.jwtService.sign({ login, id }),
     };
   }
 
   private async validateUser({ login, password }: LoginDto) {
-    const user = await this.userService.getUserByLogin(login);
+    const user = await this.userService.get(login, 'login');
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }

@@ -21,24 +21,25 @@ export class UserService {
     return await bcrypt.hash(password, salt);
   }
 
-  async saveUser(userDto: UserDto): Promise<IUser> {
+  toResponse(user: IUser): Omit<IUser, 'password'> {
+    delete user.password;
+    return user;
+  }
+
+  async save(userDto: UserDto): Promise<IUser> {
     const hash = await this.hashPassword(userDto.password);
     return await this.userRepository.save({ ...userDto, password: hash });
   }
 
-  async getAllUsers(): Promise<User[]> {
+  async getAll(): Promise<User[]> {
     return await this.userRepository.find();
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return await this.userRepository.findOne(id);
+  async get(value: string, param = 'id'): Promise<User | undefined> {
+    return await this.userRepository.findOne({ where: { [param]: value } });
   }
 
-  async getUserByLogin(login: string): Promise<User | undefined> {
-    return await this.userRepository.findOne({ where: { login } });
-  }
-
-  async removeUser(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.userRepository.delete(id);
   }
 }
