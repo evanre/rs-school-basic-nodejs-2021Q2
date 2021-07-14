@@ -24,16 +24,14 @@ services:
     restart: unless-stopped
 
   db:
-    container_name: ${DB_HOST}
-    build: ./database/
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+    image: postgres:alpine
+    container_name: ${POSTGRES_HOST}
+    env_file:
+      - ./.env
     volumes:
-      - ${DB_DATA}:/var/lib/postgresql/data
+      - ${POSTGRES_DATA}:/var/lib/postgresql/data
     ports:
-      - ${DB_PORT}:5432
+      - ${POSTGRES_PORT}:5432
     networks:
       - restapi_network
     restart: unless-stopped
